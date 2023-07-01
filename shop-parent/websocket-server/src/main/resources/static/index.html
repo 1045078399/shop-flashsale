@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>WebSocket 案例</h1>
+用户 id: <input type="text" id="userId"><button onclick="connectWS()">连接</button>
+<br>
+<textarea name="msg" id="msg" cols="30" rows="10"></textarea>
+<br>
+<button onclick="sendMsg()">发送</button>
+<script>
+    let ws;
+    function sendMsg() {
+        let msgDom = document.getElementById("msg");
+        let msg = msgDom.value;
+        ws.send(msg);
+        msgDom.innerText = "";
+    }
+    function connectWS() {
+        let userId = document.getElementById("userId").value;
+        ws = new WebSocket('ws://localhost:8091/test/' + userId);
+
+        ws.onopen = function (e) {
+            // 连接建立成功
+            console.log("连接建立成功...", e);
+        };
+
+        ws.onmessage = function (e) {
+            // 接收到服务端消息
+            console.log(e.data);
+        };
+
+        ws.onclose = function (e) {
+            // 连接关闭
+            console.log("连接关闭...", e);
+        };
+
+        ws.onerror = function (e) {
+            // 连接出现异常
+            console.log("连接出现异常...", e);
+        };
+    }
+</script>
+</body>
+</html>
